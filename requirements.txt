@@ -1,0 +1,8 @@
+flask
+torch
+transformers
+datasets
+sentencepiece
+accelerate
+gunicorn
+pandas
