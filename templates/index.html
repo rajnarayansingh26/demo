@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar AI Assistant</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, sans-serif;
+        }
+
+        body{
+            background:#f4f6f9;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+        }
+
+        .container{
+            width:90%;
+            max-width:700px;
+            background:white;
+            padding:30px;
+            border-radius:15px;
+            box-shadow:0 0 20px rgba(0,0,0,0.1);
+        }
+
+        h1{
+            text-align:center;
+            color:#2c3e50;
+            margin-bottom:20px;
+        }
+
+        textarea{
+            width:100%;
+            height:150px;
+            padding:15px;
+            border:1px solid #ccc;
+            border-radius:10px;
+            resize:none;
+            font-size:16px;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            margin-top:15px;
+            border:none;
+            border-radius:10px;
+            background:#3498db;
+            color:white;
+            font-size:18px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#2980b9;
+        }
+
+        .output{
+            margin-top:20px;
+        }
+
+        .box{
+            padding:15px;
+            border-radius:10px;
+            background:#eef2f7;
+            min-height:70px;
+            margin-top:10px;
+        }
+
+        .loading{
+            text-align:center;
+            color:#3498db;
+            display:none;
+            margin-top:10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Grammar AI Assistant</h1>
+
+    <textarea
+        id="inputText"
+        placeholder="Enter text with grammar mistakes...">
+    </textarea>
+
+    <button onclick="correctGrammar()">
+        Correct Grammar
+    </button>
+
+    <div class="loading" id="loading">
+        Processing...
+    </div>
+
+    <div class="output">
+        <h3>Corrected Text</h3>
+        <div class="box" id="result">
+            Output will appear here...
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+async function correctGrammar(){
+
+    let text =
+    document.getElementById("inputText").value;
+
+    if(text.trim()===""){
+        alert("Please enter text");
+        return;
+    }
+
+    document.getElementById("loading").style.display="block";
+
+    try{
+
+        const response = await fetch("/predict",{
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+                text:text
+            })
+        });
+
+        const data = await response.json();
+
+        document.getElementById("result").innerText =
+        data.corrected;
+
+    }
+
+    catch(error){
+
+        document.getElementById("result").innerText =
+        "Error occurred";
+    }
+
+    document.getElementById("loading").style.display="none";
+}
+
+</script>
+
+</body>
+</html>
